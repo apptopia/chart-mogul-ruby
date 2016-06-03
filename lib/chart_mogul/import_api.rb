@@ -36,18 +36,21 @@ module ChartMogul
       Import::DataSource.new(preprocess_response(response))
     end
 
-    # Public - purge all data for a DataSource
+    # Public - delete DataSource and purge all related data
     #          super dangerous
     #
     # Returns nothing but an empty hole where your data was!
-    def purge_data_source!(data_source_uuid)
+    def delete_data_source!(data_source_uuid)
       response = connection.delete do |request|
-        request.url "/v1/import/data_sources/#{data_source_uuid}/erase_data"
-        request.headers['Content-Type'] = "application/json"
-        request.body = { confirm: 1 }.to_json
+        request.url "/v1/import/data_sources/#{data_source_uuid}"
       end
       response.status == 202
     end
+
+
+    # Public - purge all data for a DataSource
+    #          alias for backwards compatibility
+    alias_method :purge_data_source!, :delete_data_source!
 
     # Public - list all Customers.
     #          this will page through all customers see #list_customers_each
