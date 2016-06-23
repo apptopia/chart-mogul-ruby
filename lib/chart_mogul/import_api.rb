@@ -127,14 +127,21 @@ module ChartMogul
     #
     # options   - Hash of filter options
     #             :data_source_uuid
+    #             :page
+    #             :per_page
+    #             :external_id
     #
     # Returns an Enumerable that will yield a ChartMogul::Import::Plan for
     # each record
     def list_plans_each(options={}, &block)
-      params = {}
-      params[:data_source_uuid] = options[:data_source_uuid] if options[:data_source_uuid]
+      options_list = [:data_source_uuid, :page, :per_page, :external_id]
+      options.each do |option|
+        unless options_list.include?(option)
+          raise StandardError.new("Incorrect option: #{option}")
+        end
+      end
 
-      paged_get("/v1/import/plans", params, :plans) do |plans|
+      paged_get("/v1/import/plans", options, :plans) do |plans|
         plans.each do |plan|
           yield Import::Plan.new(plan)
         end
