@@ -135,7 +135,7 @@ module ChartMogul
     # each record
     def list_plans_each(options={}, &block)
       options_list = [:data_source_uuid, :page, :per_page, :external_id]
-      options.each do |option|
+      options.each_pair do |option, _|
         unless options_list.include?(option)
           raise StandardError.new("Incorrect option: #{option}")
         end
