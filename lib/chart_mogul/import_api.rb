@@ -73,11 +73,10 @@ module ChartMogul
     #
     # Returns an Enumerable that will yield a ChartMogul::Import::Customer for
     # each record
-    def list_customers_each(options={}, &block)
-      params = {}
-      params[:data_source_uuid] = options[:data_source_uuid] if options[:data_source_uuid]
+    def list_customers_each(options=nil, &block)
+      options ||= {}
 
-      paged_get("/v1/import/customers", params, :customers) do |customers|
+      paged_get("/v1/import/customers", options, :customers) do |customers|
         customers.each do |customer|
           yield Import::Customer.new(customer)
         end
