@@ -255,5 +255,12 @@ module ChartMogul
       end
     end
 
+    def import_transaction(invoice_id, transaction)
+      response = connection.post do |request|
+        request.url "v1/import/invoices/#{invoice_id}/transactions"
+        request.headers['Content-Type'] = "application/json"
+        request.body = transaction.to_json
+      end
+    end
   end
 end
